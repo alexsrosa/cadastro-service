@@ -1,18 +1,17 @@
 package com.desafio.concrete.solutions.cadastroservice.usecases;
 
-import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
-import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.converters.UserToUserDtoConverter;
+import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.converters.UserToUserResumeDtoConverter;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UnauthorizedException;
-import com.desafio.concrete.solutions.cadastroservice.usecases.service.UserService;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.services.UserService;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import javax.transaction.Transactional;
 
 @Service
 public class GetUserProfileUsecase {
@@ -27,11 +26,11 @@ public class GetUserProfileUsecase {
     }
 
     @Transactional
-    public Optional<UserResumeDto> findOne(UUID id, UUID token) throws CloneNotSupportedException {
+    public Optional<UserResumeDto> findOne(UUID id, String token) throws CloneNotSupportedException {
 
         validateToken(token);
 
-        Optional<User> user = userService.findOne(id);
+        Optional<UserEntity> user = userService.findOne(id);
         if(!user.isPresent()){
             return Optional.empty();
         }
@@ -41,7 +40,7 @@ public class GetUserProfileUsecase {
         return Optional.ofNullable(userToUserResumeDtoConverter.convert(user.get().clone()));
     }
 
-    private void validateToken(UUID token, UUID tokenUser, LocalDateTime time) {
+    private void validateToken(String token, String tokenUser, LocalDateTime time) {
 
         LocalDateTime validTime = LocalDateTime.now().minusMinutes(30);
 
@@ -50,7 +49,7 @@ public class GetUserProfileUsecase {
         }
     }
 
-    private void validateToken(UUID token) {
+    private void validateToken(String token) {
         if(Objects.isNull(token)){
             throw new UnauthorizedException("Não autorizado");
         }

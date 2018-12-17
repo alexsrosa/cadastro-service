@@ -7,10 +7,16 @@ import com.desafio.concrete.solutions.cadastroservice.usecases.CreateUserUsecase
 import com.desafio.concrete.solutions.cadastroservice.usecases.GetUserProfileUsecase;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.UUID;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/cadastro")
@@ -31,8 +37,8 @@ public class CadastroController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResumeDto> findOne(
-            @RequestHeader(value="token", required = false) UUID token,
+    public ResponseEntity<UserResumeDto> getUserProfile(
+            @RequestHeader(value="token", required = false) String token,
             @PathVariable UUID userId) throws CloneNotSupportedException {
         return findOneUserUsecase.findOne(userId, token)
                 .map(ResponseEntity::ok)

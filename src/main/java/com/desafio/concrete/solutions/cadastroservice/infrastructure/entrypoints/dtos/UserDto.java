@@ -1,22 +1,27 @@
 package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 
 public class UserDto {
 
     private UUID id;
+
+    @NotBlank(message = "Campo name deve ser informado.")
     private String name;
+
+    @NotBlank(message = "Campo email deve ser informado.")
     private String email;
+
+    @NotBlank(message = "Campo password deve ser informado.")
     private String password;
     private LocalDateTime created;
     private LocalDateTime modified;
     private LocalDateTime lastLogin;
     private UUID token;
-    private List<PhoneDto> phones;
+    private Set<PhoneDto> phones;
 
     public UUID getId() {
         return id;
@@ -82,11 +87,11 @@ public class UserDto {
         this.token = token;
     }
 
-    public List<PhoneDto> getPhones() {
+    public Set<PhoneDto> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<PhoneDto> phones) {
+    public void setPhones(Set<PhoneDto> phones) {
         this.phones = phones;
     }
 }

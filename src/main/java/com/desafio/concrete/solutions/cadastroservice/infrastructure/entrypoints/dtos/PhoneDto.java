@@ -1,18 +1,23 @@
 package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos;
 
-import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
+import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 
 public class PhoneDto {
 
     private UUID id;
+
+    @NotBlank(message = "Campo number deve ser informado.")
     private String number;
+
+    @NotBlank(message = "Campo ddd deve ser informado.")
     private String ddd;
 
     @JsonIgnore
-    private User user;
+    private UserEntity user;
 
     public UUID getId() {
         return id;
@@ -38,11 +43,11 @@ public class PhoneDto {
         this.ddd = ddd;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 }

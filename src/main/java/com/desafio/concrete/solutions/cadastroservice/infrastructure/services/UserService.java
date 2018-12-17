@@ -1,13 +1,15 @@
-package com.desafio.concrete.solutions.cadastroservice.usecases.service;
+package com.desafio.concrete.solutions.cadastroservice.infrastructure.services;
 
-import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
+import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.database.repositories.UserJpaRepository;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
-import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UnauthorizedException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,31 +20,30 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(UserJpaRepository userJpaRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userJpaRepository = userJpaRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public Optional<User> create(User user){
+    public Optional<UserEntity> create(UserEntity user) {
 
-        if(userJpaRepository.existsByEmail(user.getEmail())){
+        if (userJpaRepository.existsByEmail(user.getEmail())) {
             throw new EmailFoundException();
         }
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreated(now);
         user.setModified(now);
-        user.setToken(UUID.randomUUID());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         return Optional.ofNullable(userJpaRepository.save(user));
     }
 
-    public Optional<User> findOne(UUID id) {
+    public Optional<UserEntity> findOne(UUID id) {
         return userJpaRepository.findById(id);
     }
 
-    public Optional<User> findOneByEmail(String email){
+    public Optional<UserEntity> findOneByEmail(String email) {
         return userJpaRepository.findOneByEmail(email);
     }
 
@@ -50,9 +51,17 @@ public class UserService {
         return !bCryptPasswordEncoder.matches(requestPassword, password);
     }
 
-    public User login(User user) {
-        user.setToken(UUID.randomUUID());
+    public UserEntity login(UserEntity user) {
+
+        String JWT = Jwts.builder()
+                .setSubject(user.getEmail())
+                .setExpiration(new Date(System.currentTimeMillis() + 30000))
+                .signWith(SignatureAlgorithm.HS512, user.getPassword())
+                .compact();
+
+        user.setToken(JWT);
         user.setLastLogin(LocalDateTime.now());
         return userJpaRepository.save(user);
     }
+
 }

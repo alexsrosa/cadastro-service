@@ -1,7 +1,6 @@
 package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class UserResumeDto {
@@ -10,7 +9,7 @@ public class UserResumeDto {
     private LocalDateTime created;
     private LocalDateTime modified;
     private LocalDateTime lastLogin;
-    private UUID token;
+    private String token;
 
     public UUID getId() {
         return id;
@@ -44,11 +43,11 @@ public class UserResumeDto {
         this.lastLogin = lastLogin;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(UUID token) {
+    public void setToken(String token) {
         this.token = token;
     }
 }

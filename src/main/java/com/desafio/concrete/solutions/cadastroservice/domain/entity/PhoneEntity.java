@@ -3,15 +3,22 @@ package com.desafio.concrete.solutions.cadastroservice.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
-public class Phone {
+@Table(name = "PHONE")
+public class PhoneEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -19,20 +26,20 @@ public class Phone {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotEmpty
+    @NotBlank(message = "Campo number não pode ser vazio!")
     @Size(max = 9)
     private String number;
 
-    @NotNull @NotEmpty
+    @NotBlank(message = "Campo ddd não pode ser vazio!")
     @Size(max = 3)
     private String ddd;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
-    private User user;
+    private UserEntity user;
 
-    public Phone() {
+    public PhoneEntity() {
     }
 
     public UUID getId() {
@@ -59,19 +66,19 @@ public class Phone {
         this.ddd = ddd;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Phone)) return false;
-        Phone phone = (Phone) o;
+        if (!(o instanceof PhoneEntity)) return false;
+        PhoneEntity phone = (PhoneEntity) o;
         return Objects.equals(getId(), phone.getId()) &&
                 Objects.equals(getNumber(), phone.getNumber()) &&
                 Objects.equals(getDdd(), phone.getDdd());

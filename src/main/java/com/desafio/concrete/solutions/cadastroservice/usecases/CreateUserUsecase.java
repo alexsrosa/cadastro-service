@@ -1,16 +1,16 @@
 package com.desafio.concrete.solutions.cadastroservice.usecases;
 
-import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
+import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.converters.UserDtoToUserConverter;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.converters.UserToUserResumeDtoConverter;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
-import com.desafio.concrete.solutions.cadastroservice.usecases.service.PhoneService;
-import com.desafio.concrete.solutions.cadastroservice.usecases.service.UserService;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.services.UserService;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.services.PhoneService;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
+import javax.transaction.Transactional;
 
 @Service
 public class CreateUserUsecase {
@@ -21,8 +21,8 @@ public class CreateUserUsecase {
     private final UserToUserResumeDtoConverter userToUserToCreateDtoConverter;
 
     public CreateUserUsecase(UserService userService, PhoneService phoneService,
-                             UserDtoToUserConverter userDtoToUserConverter,
-                             UserToUserResumeDtoConverter userToUserToCreateDtoConverter) {
+            UserDtoToUserConverter userDtoToUserConverter,
+            UserToUserResumeDtoConverter userToUserToCreateDtoConverter) {
         this.userService = userService;
         this.phoneService = phoneService;
         this.userDtoToUserConverter = userDtoToUserConverter;
@@ -32,13 +32,13 @@ public class CreateUserUsecase {
     @Transactional
     public Optional<UserResumeDto> create(UserDto dto) throws CloneNotSupportedException {
 
-        Optional<User> user = Optional.ofNullable(userDtoToUserConverter.convert(dto));
+        Optional<UserEntity> user = Optional.ofNullable(userDtoToUserConverter.convert(dto));
 
-        if(user.isPresent()){
-            Optional<User> userSaved = userService.create(user.get());
+        if (user.isPresent()) {
+            Optional<UserEntity> userSaved = userService.create(user.get());
             phoneService.create(userSaved);
 
-            if(userSaved.isPresent()){
+            if (userSaved.isPresent()) {
                 return Optional.ofNullable(userToUserToCreateDtoConverter.convert(userSaved.get().clone()));
             }
         }

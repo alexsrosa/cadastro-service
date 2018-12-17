@@ -1,6 +1,6 @@
-package com.desafio.concrete.solutions.cadastroservice.usecases.service;
+package com.desafio.concrete.solutions.cadastroservice.infrastructure.services;
 
-import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
+import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.database.repositories.PhoneJpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class PhoneService {
         this.phoneRepository = phoneRepository;
     }
 
-    public Optional<User> create(Optional<User> user) {
+    public Optional<UserEntity> create(Optional<UserEntity> user) {
         if(user.isPresent()){
             user.get().getPhones().forEach( phone -> {
                 phone.setUser(user.get());

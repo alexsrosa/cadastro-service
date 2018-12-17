@@ -2,18 +2,25 @@ package com.desafio.concrete.solutions.cadastroservice.domain.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
-public class User implements Cloneable{
+@Table(name = "USER")
+public class UserEntity implements Cloneable{
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -21,32 +28,31 @@ public class User implements Cloneable{
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotNull @NotEmpty
+    @NotBlank(message = "Campo name não pode ser vazio!")
     @Size(max = 100)
     private String name;
 
-    @NotNull @NotEmpty
+    @NotBlank(message = "Campo email não pode ser vazio!")
     @Size(max = 100)
     private String email;
 
-    @NotNull @NotEmpty
+    @NotBlank(message = "Campo password não pode ser vazio!")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Campo created não pode ser nulo!")
     private LocalDateTime created;
 
-    @NotNull
+    @NotNull(message = "Campo modified não pode ser nulo!")
     private LocalDateTime modified;
 
     private LocalDateTime lastLogin;
 
-    @NotNull
-    private UUID token;
+    private String token;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<Phone> phones = new HashSet<>();
+    private Set<PhoneEntity> phones = new HashSet<>();
 
-    public User() {
+    public UserEntity() {
     }
 
     public UUID getId() {
@@ -105,31 +111,31 @@ public class User implements Cloneable{
         this.lastLogin = lastLogin;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(UUID token) {
+    public void setToken(String token) {
         this.token = token;
     }
 
-    public Set<Phone> getPhones() {
+    public Set<PhoneEntity> getPhones() {
         return phones;
     }
 
-    public void setPhones(Set<Phone> phones) {
+    public void setPhones(Set<PhoneEntity> phones) {
         this.phones = phones;
     }
 
-    public User clone() throws CloneNotSupportedException {
-        return (User) super.clone();
+    public UserEntity clone() throws CloneNotSupportedException {
+        return (UserEntity) super.clone();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
+        if (!(o instanceof UserEntity)) return false;
+        UserEntity user = (UserEntity) o;
         return Objects.equals(getId(), user.getId()) &&
                 Objects.equals(getName(), user.getName()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&

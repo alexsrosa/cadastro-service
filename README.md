@@ -37,6 +37,6 @@ Payload:
 <pre>
 {
         "email": "joao@silva.org",
-        "password": "hunter23"
+        "password": "hunter2"
 }
 </pre>
