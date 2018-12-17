@@ -2,6 +2,7 @@ package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoint
 
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.LoginDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UserNotFoundException;
 import com.desafio.concrete.solutions.cadastroservice.usecases.LoginUsecase;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class LoginController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResumeDto> login(@Valid @RequestBody LoginDto dto) {
-        return ResponseEntity.ok(loginUsecase.login(dto).get());
+        return loginUsecase.login(dto)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não localizado."));
     }
 }

@@ -30,7 +30,6 @@ public class User implements Cloneable{
     private String email;
 
     @NotNull @NotEmpty
-    @Size(max = 14)
     private String password;
 
     @NotNull

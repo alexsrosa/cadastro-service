@@ -4,7 +4,7 @@ import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UserNotFoundException;
 import com.desafio.concrete.solutions.cadastroservice.usecases.CreateUserUsecase;
-import com.desafio.concrete.solutions.cadastroservice.usecases.FindOneUserUsecase;
+import com.desafio.concrete.solutions.cadastroservice.usecases.GetUserProfileUsecase;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +17,10 @@ import java.util.UUID;
 public class CadastroController {
 
     private final CreateUserUsecase createUserUseCase;
-    private final FindOneUserUsecase findOneUserUsecase;
+    private final GetUserProfileUsecase findOneUserUsecase;
 
     public CadastroController(CreateUserUsecase createUserUseCase,
-                              FindOneUserUsecase findOneUserUsecase) {
+                              GetUserProfileUsecase findOneUserUsecase) {
         this.createUserUseCase = createUserUseCase;
         this.findOneUserUsecase = findOneUserUsecase;
     }
@@ -31,8 +31,10 @@ public class CadastroController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> findOne(@PathVariable UUID userId) throws CloneNotSupportedException {
-        return findOneUserUsecase.findOne(userId)
+    public ResponseEntity<UserResumeDto> findOne(
+            @RequestHeader(value="token", required = false) UUID token,
+            @PathVariable UUID userId) throws CloneNotSupportedException {
+        return findOneUserUsecase.findOne(userId, token)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não localizado."));
     }

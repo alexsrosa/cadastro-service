@@ -18,7 +18,8 @@ public class LoginUsecase {
     private final UserService userService;
     private final UserToUserResumeDtoConverter userToUserResumeDtoConverter;
 
-    public LoginUsecase(UserService userService, UserToUserResumeDtoConverter userToUserResumeDtoConverter) {
+    public LoginUsecase(UserService userService,
+                        UserToUserResumeDtoConverter userToUserResumeDtoConverter) {
         this.userService = userService;
         this.userToUserResumeDtoConverter = userToUserResumeDtoConverter;
     }
@@ -26,18 +27,17 @@ public class LoginUsecase {
     @Transactional
     public Optional<UserResumeDto> login(LoginDto dto) {
 
-        Optional<User> oneByEmail = userService.findOneByEmail(dto.getEmail());
+        Optional<User> user = userService.findOneByEmail(dto.getEmail());
 
-        if(!oneByEmail.isPresent()){
+        if(!user.isPresent()){
             throw new UserNotFoundException("Usuário e/ou senha inválidos");
         }
 
-        Optional<User> user = userService.findOneByEmailAndPassword(dto.getEmail(), dto.getPassword());
-
-        if(!user.isPresent()){
+        if(userService.isPasswordInvalid(dto.getPassword(), user.get().getPassword())){
             throw new UnauthorizedException();
         }
 
-        return Optional.ofNullable(userToUserResumeDtoConverter.convert(user.get()));
+        User userBeforeLogin = userService.login(user.get());
+        return Optional.ofNullable(userToUserResumeDtoConverter.convert(userBeforeLogin));
     }
 }

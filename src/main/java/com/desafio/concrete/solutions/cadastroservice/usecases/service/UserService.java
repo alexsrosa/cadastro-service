@@ -3,6 +3,8 @@ package com.desafio.concrete.solutions.cadastroservice.usecases.service;
 import com.desafio.concrete.solutions.cadastroservice.domain.entity.User;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.database.repositories.UserJpaRepository;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UnauthorizedException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,9 +15,12 @@ import java.util.UUID;
 public class UserService {
 
     private final UserJpaRepository userJpaRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserJpaRepository userJpaRepository) {
+    public UserService(UserJpaRepository userJpaRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userJpaRepository = userJpaRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public Optional<User> create(User user){
@@ -28,6 +33,8 @@ public class UserService {
         user.setCreated(now);
         user.setModified(now);
         user.setToken(UUID.randomUUID());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
         return Optional.ofNullable(userJpaRepository.save(user));
     }
 
@@ -39,7 +46,13 @@ public class UserService {
         return userJpaRepository.findOneByEmail(email);
     }
 
-    public Optional<User> findOneByEmailAndPassword(String email, String password){
-        return userJpaRepository.findOneByEmailAndPassword(email, password);
+    public boolean isPasswordInvalid(String requestPassword, String password) {
+        return !bCryptPasswordEncoder.matches(requestPassword, password);
+    }
+
+    public User login(User user) {
+        user.setToken(UUID.randomUUID());
+        user.setLastLogin(LocalDateTime.now());
+        return userJpaRepository.save(user);
     }
 }
