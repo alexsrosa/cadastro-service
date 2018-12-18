@@ -2,6 +2,7 @@ package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoint
 
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.GeneralException;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UserNotFoundException;
 import com.desafio.concrete.solutions.cadastroservice.usecases.CreateUserUsecase;
 import com.desafio.concrete.solutions.cadastroservice.usecases.GetUserProfileUsecase;
@@ -29,24 +30,26 @@ import javax.validation.Valid;
 public class CadastroController {
 
     private final CreateUserUsecase createUserUseCase;
-    private final GetUserProfileUsecase findOneUserUsecase;
+    private final GetUserProfileUsecase getUserProfileUsecase;
 
     public CadastroController(CreateUserUsecase createUserUseCase,
-                              GetUserProfileUsecase findOneUserUsecase) {
+            GetUserProfileUsecase findOneUserUsecase) {
         this.createUserUseCase = createUserUseCase;
-        this.findOneUserUsecase = findOneUserUsecase;
+        this.getUserProfileUsecase = findOneUserUsecase;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResumeDto> create(@Valid @RequestBody UserDto dto) throws CloneNotSupportedException {
-        return ResponseEntity.ok(createUserUseCase.create(dto).get());
+        return createUserUseCase.create(dto)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new GeneralException("Erro ao efetuar o cadastro do usuário."));
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResumeDto> getUserProfile(
-            @RequestHeader(value="token", required = false) String token,
+            @RequestHeader(value = "token", required = false) String token,
             @PathVariable UUID userId) throws CloneNotSupportedException {
-        return findOneUserUsecase.findOne(userId, token)
+        return getUserProfileUsecase.findOne(userId, token)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não localizado."));
     }

@@ -2,6 +2,7 @@ package com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoint
 
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.InvalidSessionException;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.NotAvailableException;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UnauthorizedException;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -49,6 +50,11 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler impl
     @ExceptionHandler(EmailFoundException.class)
     public final ResponseEntity<Object> handleEmailFoundException(Exception ex, WebRequest request) {
         return createReturn(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotAvailableException.class)
+    public final ResponseEntity<Object> handleNotAvailableException(Exception ex, WebRequest request) {
+        return createReturn(ex.getMessage(), HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override

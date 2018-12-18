@@ -1,0 +1,17 @@
+language: java
+jdk:
+- oraclejdk8
+
+script:
+- ./gradlew clean build test check
+- sonar-scanner
+
+cache:
+  directories:
+  - $HOME/.m2
+
+addons:
+  sonarcloud:
+    organization: "alexsrosa-github"
+    token:
+      secure: f43762c9f8b67e89c5537ed87ba286ab1da608da
