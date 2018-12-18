@@ -1,5 +1,9 @@
+
+
+
 # Projeto Cadastro e Login
 
+[![Build Status](https://api.travis-ci.com/alexsrosa/cadastro-service.svg?branch=master)](https://api.travis-ci.com/alexsrosa/cadastro-service)
 
 Aplicação que expõe uma API RESTful de criação de usuários e login.
 
