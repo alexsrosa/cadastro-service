@@ -13,17 +13,18 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.6"
+    id "jacoco"
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: "jacoco"
+apply plugin: 'jacoco'
 apply plugin: 'org.sonarqube'
 
 jacoco {
-    toolVersion = "0.7.9"
+    toolVersion = "0.8.2"
     reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
@@ -32,6 +33,13 @@ jacocoTestReport {
         xml.enabled false
         csv.enabled false
         html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+test {
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpDir = file("$buildDir/jacoco/classpathdumps")
     }
 }
 
