@@ -16,6 +16,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * Classe de entidate do telefone.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Entity
 @Table(name = "PHONE")
 public class PhoneEntity {

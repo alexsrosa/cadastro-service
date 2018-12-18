@@ -1,42 +1,55 @@
 package com.desafio.concrete.solutions.cadastroservice.infrastructure.services;
 
 import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers.CryptPasswordHelper;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers.SecurityHelper;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.database.repositories.UserJpaRepository;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Classe de serviço do usuário.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Service
 public class UserService {
 
     private final UserJpaRepository userJpaRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserJpaRepository userJpaRepository,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    /**
+     * Método que efetua a criação de um novo usuário.
+     *
+     * @param user objeto do tipo {@link UserEntity}
+     * @return retorna um {@link Optional} de {@link UserEntity}
+     */
     public Optional<UserEntity> create(UserEntity user) {
 
-        if (userJpaRepository.existsByEmail(user.getEmail())) {
-            throw new EmailFoundException();
-        }
+        validateEmailFound(user.getEmail());
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreated(now);
         user.setModified(now);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setLastLogin(now);
+        user.setPassword(CryptPasswordHelper.cryptPasswordEncoder(user.getPassword()));
+        user.setToken(SecurityHelper.generateTokenJwt(user));
 
         return Optional.ofNullable(userJpaRepository.save(user));
+    }
+
+    private void validateEmailFound(String email) {
+        if (userJpaRepository.existsByEmail(email)) {
+            throw new EmailFoundException();
+        }
     }
 
     public Optional<UserEntity> findOne(UUID id) {
@@ -47,21 +60,10 @@ public class UserService {
         return userJpaRepository.findOneByEmail(email);
     }
 
-    public boolean isPasswordInvalid(String requestPassword, String password) {
-        return !bCryptPasswordEncoder.matches(requestPassword, password);
-    }
-
     public UserEntity login(UserEntity user) {
 
-        String JWT = Jwts.builder()
-                .setSubject(user.getEmail())
-                .setExpiration(new Date(System.currentTimeMillis() + 30000))
-                .signWith(SignatureAlgorithm.HS512, user.getPassword())
-                .compact();
-
-        user.setToken(JWT);
+        user.setToken(SecurityHelper.generateTokenJwt(user));
         user.setLastLogin(LocalDateTime.now());
         return userJpaRepository.save(user);
     }
-
 }

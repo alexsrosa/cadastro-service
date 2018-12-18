@@ -13,6 +13,12 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
 
+/**
+ * Classe que contêm a implementação do usecase para busca de um perfil existente.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Service
 public class GetUserProfileUsecase {
 

@@ -5,6 +5,12 @@ import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Classe de transferência de dados do usuário.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 public class UserDto {
 
     private UUID id;

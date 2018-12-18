@@ -18,6 +18,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Classe de entidate do usuário.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Entity
 @Table(name = "USER")
 public class UserEntity implements Cloneable{

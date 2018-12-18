@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,9 +21,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de transfência de dados do usuário.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @ControllerAdvice
 @RestController
-public class GeneralExceptionHandler extends ResponseEntityExceptionHandler implements Handler {
+public class GeneralExceptionHandler extends ResponseEntityExceptionHandler implements HelperHandler {
 
     @ExceptionHandler({Exception.class, MethodNotAllowedException.class})
     public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) {
@@ -44,6 +51,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler impl
         return createReturn(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -54,6 +62,12 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler impl
         for (final ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
-        return createReturn(errors, HttpStatus.BAD_REQUEST);
+        return createReturn(errors, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return createReturn(ex.getMessage(), status);
     }
 }

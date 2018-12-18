@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
+/**
+ * Classe que contêm a implementação do usecase de criação de um novo usuário.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Service
 public class CreateUserUsecase {
 

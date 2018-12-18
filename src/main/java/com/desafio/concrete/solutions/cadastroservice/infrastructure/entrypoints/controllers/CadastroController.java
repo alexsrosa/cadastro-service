@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 import javax.validation.Valid;
 
+/**
+ * Classe com implementações do Endpoint de cadastro de novos usuários.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @RestController
 @RequestMapping(value = "/api/cadastro")
 public class CadastroController {

@@ -1,5 +1,8 @@
 server:
   port: 8080
+  error:
+    whitelabel:
+      enabled: false
 spring:
   application:
     name: cadastro-service
@@ -19,4 +22,3 @@ spring:
 logging:
   level:
     root: INFO
-  config:

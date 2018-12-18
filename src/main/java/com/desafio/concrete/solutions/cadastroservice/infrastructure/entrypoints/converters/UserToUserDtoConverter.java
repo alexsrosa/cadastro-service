@@ -6,6 +6,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+/**
+ * Classe de conversão da classe {@link UserEntity} para {@link UserDto}.
+ *
+ * @author <a href="mailto:alexsros@gmail.com">Alex S. Rosa</a>
+ * @since 18/12/2018 13:41:23
+ */
 @Component
 public class UserToUserDtoConverter implements Converter<UserEntity, UserDto> {
 

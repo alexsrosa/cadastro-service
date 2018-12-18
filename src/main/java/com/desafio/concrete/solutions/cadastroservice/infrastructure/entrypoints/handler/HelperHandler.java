@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface Handler {
+public interface HelperHandler {
 
     default ResponseEntity<Object> createReturn(String message, HttpStatus httpStatus){
         return new ResponseEntity(new ExceptionResponse(message), httpStatus);
