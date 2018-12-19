@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.com/alexsrosa/cadastro-service.svg?branch=master)](https://travis-ci.com/alexsrosa/cadastro-service)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexsrosa%3Acadastro-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=alexsrosa%3Acadastro-service)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexsrosa%3Acadastro-service&metric=coverage)](https://sonarcloud.io/api/project_badges/measure?project=alexsrosa%3Acadastro-service)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexsrosa%3Acadastro-service&metric=coverage)](https://sonarcloud.io/component_measures?id=alexsrosa%3Acadastro-service&metric=coverage)
 
 
 
