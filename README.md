@@ -122,3 +122,17 @@ Payload:
         "password": "hunter2"
 }
 ```
+
+## Docker
+
+Para efetuar o build da aplicação, conforme detalhe incluído no dockerfile e criar uma nova imagem:
+
+```
+docker build . -t alexsrosa/cadastro-service 
+```
+
+Rodar a imagem criada no passo anterior:
+
+```
+docker run -d --name cadastro-service -p 8080:8080 alexsrosa/cadastro-service
+```
