@@ -1,7 +1,7 @@
 package com.desafio.concrete.solutions.cadastroservice.usecases;
 
 import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
-import com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers.CryptPasswordHelper;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.helpers.CryptPasswordHelper;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.converters.UserToUserResumeDtoConverter;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.LoginDto;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;

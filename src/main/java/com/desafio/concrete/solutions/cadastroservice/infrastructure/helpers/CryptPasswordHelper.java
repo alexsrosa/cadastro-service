@@ -1,4 +1,4 @@
-package com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers;
+package com.desafio.concrete.solutions.cadastroservice.infrastructure.helpers;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

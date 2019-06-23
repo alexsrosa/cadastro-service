@@ -22,12 +22,10 @@ public class PhoneService {
     }
 
     public Optional<UserEntity> create(Optional<UserEntity> user) {
-        if(user.isPresent()){
-            user.get().getPhones().forEach( phone -> {
-                phone.setUser(user.get());
-                phoneRepository.save(phone);
-            });
-        }
+        user.ifPresent(userEntity -> userEntity.getPhones().forEach(phone -> {
+            phone.setUser(userEntity);
+            phoneRepository.save(phone);
+        }));
         return user;
     }
 }

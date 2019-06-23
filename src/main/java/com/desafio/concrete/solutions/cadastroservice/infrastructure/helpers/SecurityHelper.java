@@ -1,4 +1,4 @@
-package com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers;
+package com.desafio.concrete.solutions.cadastroservice.infrastructure.helpers;
 
 import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
 import io.jsonwebtoken.Jwts;

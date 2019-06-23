@@ -1,8 +1,8 @@
 package com.desafio.concrete.solutions.cadastroservice.infrastructure.services;
 
 import com.desafio.concrete.solutions.cadastroservice.domain.entity.UserEntity;
-import com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers.CryptPasswordHelper;
-import com.desafio.concrete.solutions.cadastroservice.infrastructure.Helpers.SecurityHelper;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.helpers.CryptPasswordHelper;
+import com.desafio.concrete.solutions.cadastroservice.infrastructure.helpers.SecurityHelper;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.database.repositories.UserJpaRepository;
 import com.desafio.concrete.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
 import org.springframework.stereotype.Service;
