@@ -3,6 +3,9 @@ server:
   error:
     whitelabel:
       enabled: false
+  servlet:
+    context-path: /api
+
 spring:
   application:
     name: cadastro-service
