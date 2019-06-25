@@ -12,6 +12,5 @@ public class CadastroServiceApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }
 

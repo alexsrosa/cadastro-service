@@ -45,9 +45,6 @@ public class PhoneEntity {
     @JsonIgnore
     private UserEntity user;
 
-    public PhoneEntity() {
-    }
-
     public UUID getId() {
         return id;
     }

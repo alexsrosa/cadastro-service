@@ -1,6 +1,7 @@
 package br.com.system.solutions.cadastroservice.domain.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "USER")
-public class UserEntity implements Cloneable{
+public class UserEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -57,9 +58,6 @@ public class UserEntity implements Cloneable{
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<PhoneEntity> phones = new HashSet<>();
-
-    public UserEntity() {
-    }
 
     public UUID getId() {
         return id;
@@ -131,10 +129,6 @@ public class UserEntity implements Cloneable{
 
     public void setPhones(Set<PhoneEntity> phones) {
         this.phones = phones;
-    }
-
-    public UserEntity clone() throws CloneNotSupportedException {
-        return (UserEntity) super.clone();
     }
 
     @Override

@@ -3,9 +3,6 @@ server:
   error:
     whitelabel:
       enabled: false
-  servlet:
-    context-path: /api
-
 spring:
   application:
     name: cadastro-service
@@ -23,6 +20,9 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 logging:
   level:
     root: INFO

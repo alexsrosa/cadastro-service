@@ -5,6 +5,7 @@ import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.conver
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UnauthorizedException;
 import br.com.system.solutions.cadastroservice.infrastructure.services.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class GetUserProfileUsecase {
     }
 
     @Transactional
-    public Optional<UserResumeDto> findOne(UUID id, String token) throws CloneNotSupportedException {
+    public Optional<UserResumeDto> findOne(UUID id, String token) {
 
         validateToken(token);
 
@@ -43,7 +44,10 @@ public class GetUserProfileUsecase {
 
         validateToken(token, user.get().getToken(), user.get().getLastLogin());
 
-        return Optional.ofNullable(userToUserResumeDtoConverter.convert(user.get().clone()));
+        UserEntity newUser = new UserEntity();
+        BeanUtils.copyProperties(user.get(), newUser);
+
+        return Optional.ofNullable(userToUserResumeDtoConverter.convert(newUser));
     }
 
     private void validateToken(String token, String tokenUser, LocalDateTime time) {

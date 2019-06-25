@@ -3,9 +3,11 @@ package br.com.system.solutions.cadastroservice.repositories;
 import br.com.system.solutions.cadastroservice.domain.entity.UserEntity;
 import br.com.system.solutions.cadastroservice.domain.repository.UserRepository;
 import br.com.system.solutions.cadastroservice.domain.entity.PhoneEntity;
+import net.minidev.json.writer.BeansMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -72,7 +74,8 @@ public class UserRepositoryIntegrationTest {
     @Test(expected = ConstraintViolationException.class)
     public void whenSaveUser_thenReturnUserEmailFail() throws CloneNotSupportedException {
 
-        UserEntity userCloneToFail = userEntity.clone();
+        UserEntity userCloneToFail = new UserEntity();
+        BeanUtils.copyProperties(userEntity, userCloneToFail);
         userCloneToFail.setEmail(null);
 
         // given
@@ -83,7 +86,8 @@ public class UserRepositoryIntegrationTest {
     @Test(expected = ConstraintViolationException.class)
     public void whenSaveUser_thenReturnUserPasswordFail() throws CloneNotSupportedException {
 
-        UserEntity userCloneToFail = userEntity.clone();
+        UserEntity userCloneToFail = new UserEntity();
+        BeanUtils.copyProperties(userEntity, userCloneToFail);
         userCloneToFail.setPassword(null);
 
         // given
@@ -94,7 +98,8 @@ public class UserRepositoryIntegrationTest {
     @Test(expected = ConstraintViolationException.class)
     public void whenSaveUser_thenReturnUserNameFail() throws CloneNotSupportedException {
 
-        UserEntity userCloneToFail = userEntity.clone();
+        UserEntity userCloneToFail = new UserEntity();
+        BeanUtils.copyProperties(userEntity, userCloneToFail);
         userCloneToFail.setName(null);
 
         // given
@@ -105,7 +110,8 @@ public class UserRepositoryIntegrationTest {
     @Test(expected = ConstraintViolationException.class)
     public void whenSaveUser_thenReturnUserCreatedFail() throws CloneNotSupportedException {
 
-        UserEntity userCloneToFail = userEntity.clone();
+        UserEntity userCloneToFail = new UserEntity();
+        BeanUtils.copyProperties(userEntity, userCloneToFail);
         userCloneToFail.setCreated(null);
 
         // given
@@ -116,7 +122,8 @@ public class UserRepositoryIntegrationTest {
     @Test(expected = ConstraintViolationException.class)
     public void whenSaveUser_thenReturnUserModifiedFail() throws CloneNotSupportedException {
 
-        UserEntity userCloneToFail = userEntity.clone();
+        UserEntity userCloneToFail = new UserEntity();
+        BeanUtils.copyProperties(userEntity, userCloneToFail);
         userCloneToFail.setModified(null);
 
         // given

@@ -27,7 +27,7 @@ import javax.validation.Valid;
  * @since 18/12/2018 13:41:23
  */
 @RestController
-@RequestMapping(value = "/cadastro")
+@RequestMapping(value = "/api/cadastro")
 public class CadastroController {
 
     private final CreateUserUsecase createUserUseCase;
@@ -40,8 +40,7 @@ public class CadastroController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResumeDto> create(@Valid @RequestBody UserDto dto, UriComponentsBuilder uri)
-            throws CloneNotSupportedException {
+    public ResponseEntity<UserResumeDto> create(@Valid @RequestBody UserDto dto, UriComponentsBuilder uri) {
 
         return createUserUseCase.create(dto)
                 .map((UserResumeDto userResDto) ->

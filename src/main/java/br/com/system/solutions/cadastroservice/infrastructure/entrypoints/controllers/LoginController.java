@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * @since 18/12/2018 13:41:23
  */
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/api/login")
 public class LoginController {
 
     private final LoginUsecase loginUsecase;

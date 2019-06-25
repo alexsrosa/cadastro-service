@@ -7,6 +7,7 @@ import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.U
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
 import br.com.system.solutions.cadastroservice.infrastructure.services.UserService;
 import br.com.system.solutions.cadastroservice.infrastructure.services.PhoneService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class CreateUserUsecase {
     }
 
     @Transactional
-    public Optional<UserResumeDto> create(UserDto dto) throws CloneNotSupportedException {
+    public Optional<UserResumeDto> create(UserDto dto) {
 
         Optional<UserEntity> user = Optional.ofNullable(userDtoToUserConverter.convert(dto));
 
@@ -45,7 +46,10 @@ public class CreateUserUsecase {
             phoneService.create(userSaved);
 
             if (userSaved.isPresent()) {
-                return Optional.ofNullable(userToUserToCreateDtoConverter.convert(userSaved.get().clone()));
+                UserEntity newUser = new UserEntity();
+                BeanUtils.copyProperties(userSaved.get(), newUser);
+
+                return Optional.ofNullable(userToUserToCreateDtoConverter.convert(newUser));
             }
         }
         return Optional.empty();

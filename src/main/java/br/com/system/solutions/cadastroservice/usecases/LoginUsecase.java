@@ -8,6 +8,7 @@ import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.except
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.exceptions.UserNotFoundException;
 import br.com.system.solutions.cadastroservice.infrastructure.helpers.CryptPasswordHelper;
 import br.com.system.solutions.cadastroservice.infrastructure.services.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class LoginUsecase {
     }
 
     @Transactional
-    public Optional<UserResumeDto> login(LoginDto dto) throws CloneNotSupportedException {
+    public Optional<UserResumeDto> login(LoginDto dto) {
 
         Optional<UserEntity> user = userService.findOneByEmail(dto.getEmail());
 
@@ -44,7 +45,8 @@ public class LoginUsecase {
             throw new UnauthorizedException();
         }
 
-        UserEntity userBeforeLogin = userService.login(user.get());
-        return Optional.ofNullable(userToUserResumeDtoConverter.convert(userBeforeLogin.clone()));
+        UserEntity userBeforeLogin = new UserEntity();
+        BeanUtils.copyProperties(userService.login(user.get()), userBeforeLogin);
+        return Optional.ofNullable(userToUserResumeDtoConverter.convert(userBeforeLogin));
     }
 }
