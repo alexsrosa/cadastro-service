@@ -44,7 +44,7 @@ public class CadastroController {
 
         return createUserUseCase.create(dto)
                 .map((UserResumeDto userResDto) ->
-                        ResponseEntity.created(uri.path("/cadastro/{userId}")
+                        ResponseEntity.created(uri.path("/api/cadastro/{userId}")
                                 .buildAndExpand(userResDto.getId()).toUri())
                                 .body(userResDto))
                 .orElseThrow(() -> new GeneralException("Erro ao efetuar o cadastro do usuário."));

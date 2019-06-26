@@ -1,14 +1,15 @@
 package br.com.system.solutions.cadastroservice.entrypoints;
 
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.controllers.CadastroController;
+import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.converters.UserDtoToUserConverter;
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.converters.UserToUserResumeDtoConverter;
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.PhoneDto;
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserDto;
 import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.dtos.UserResumeDto;
-import br.com.system.solutions.cadastroservice.usecases.CreateUserUsecase;
-import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.converters.UserDtoToUserConverter;
+import br.com.system.solutions.cadastroservice.infrastructure.entrypoints.exceptions.EmailFoundException;
 import br.com.system.solutions.cadastroservice.infrastructure.services.PhoneService;
 import br.com.system.solutions.cadastroservice.infrastructure.services.UserService;
+import br.com.system.solutions.cadastroservice.usecases.CreateUserUsecase;
 import br.com.system.solutions.cadastroservice.usecases.GetUserProfileUsecase;
 import br.com.system.solutions.cadastroservice.usecases.LoginUsecase;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,9 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,5 +103,32 @@ public class CadastroControllerTest {
         mvc.perform(post("/api/cadastro")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void givenUserDto_whenCadastro_thenReturnJsonUserResumeDto_isCreated() throws Exception {
+        when(createUserUsecase.create(any(UserDto.class)))
+                .thenReturn(Optional.ofNullable(userResumeDto));
+
+        mvc.perform(post("/api/cadastro")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isCreated());
+
+        verify(createUserUsecase, times(1)).create(any(UserDto.class));
+    }
+
+    @Test
+    public void givenUserDto_whenEmailExists_thenReturnMensagem_isBadRequest() throws Exception {
+
+        when(createUserUsecase.create(any(UserDto.class)))
+                .thenThrow(EmailFoundException.class);
+
+        mvc.perform(post("/api/cadastro")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isBadRequest());
+
+        verify(createUserUsecase, times(1)).create(any(UserDto.class));
     }
 }
