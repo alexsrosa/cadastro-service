@@ -123,6 +123,15 @@ Payload:
 }
 ```
 
+## Build
+
+Execute o seguinte comando para efetuar o build de projeto:
+
+```
+gradle build
+```
+
+
 ## Docker
 
 Para efetuar o build da aplicação, conforme detalhe incluído no dockerfile e criar uma nova imagem:
